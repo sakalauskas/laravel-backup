@@ -127,7 +127,7 @@ class Laravel5ServiceProvider extends ServiceProvider {
 
     private function getDatabaseConfig($connections) {
         $mapped = array_map(function ($connection) {
-            if ( ! in_array($connection['driver'], ['mysql', 'pgsql'])) {
+            if ( ! in_array($connection['driver'], ['mysql', 'pgsql', 'mongodb'])) {
                 return;
             }
 
