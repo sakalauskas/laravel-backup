@@ -13,8 +13,15 @@
       "homepage": "http://heybigname.com/"
     }
   ],
+  "repositories":
+  [
+    {
+      "type": "vcs",
+      "url": "https://github.com/sakalauskas/backup-manager"
+    }
+  ],
   "require": {
-    "backup-manager/backup-manager": "^1.0",
+    "backup-manager/backup-manager": "dev-mongodb-development",
     "php": "^5.5.0",
     "symfony/process": "^2.0",
     "illuminate/support": "^4.0||^5.0",
