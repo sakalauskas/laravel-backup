@@ -23,7 +23,7 @@
   "require": {
     "backup-manager/backup-manager": "dev-mongodb-development",
     "php": "^5.5.0|^7.0",
-    "symfony/process": "^2.0",
+    "symfony/process": "^3.0",
     "illuminate/support": "^4.0||^5.0",
     "illuminate/container": "^4.0||^5.0",
     "illuminate/console": "^4.0||^5.0"
