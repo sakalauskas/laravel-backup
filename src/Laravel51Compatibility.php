@@ -4,17 +4,17 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 
 /**
- * Class Laravel4Compatibility
+ * Class Laravel5Compatibility
  * @package BackupManager\Laravel
  */
-trait Laravel4Compatibility {
+trait Laravel51Compatibility {
     /**
      * @param array $headers
      * @param array $rows
      * @internal param string $style
      * @return void
      */
-    public function table(array $headers, array $rows, $style = 'default') {
+    public function table(array $headers, $rows, $style = 'default') {
         try {
             $table = $this->getHelperSet()->get('table');
         } catch (InvalidArgumentException $error) {

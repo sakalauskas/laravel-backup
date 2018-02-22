@@ -12,10 +12,9 @@ use BackupManager\ShellProcessing\ShellProcessor;
  * Class BackupManagerServiceProvider
  * @package BackupManager\Laravel
  */
-class Laravel4ServiceProvider extends ServiceProvider {
+class Laravel55ServiceProvider extends ServiceProvider {
     use GetDatabaseConfig;
 
-    /** @var bool */
     protected $defer = true;
 
     /**
@@ -24,7 +23,8 @@ class Laravel4ServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-        $this->package('backup-manager/laravel', 'backup-manager', realpath(app_path("config")));
+        $configPath = __DIR__ . '/../config/backup-manager.php';
+        $this->publishes([$configPath => config_path('backup-manager.php')], 'config');
     }
 
     /**
@@ -33,6 +33,8 @@ class Laravel4ServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register() {
+        $configPath = __DIR__ . '/../config/backup-manager.php';
+        $this->mergeConfigFrom($configPath, 'backup-manager');
         $this->registerFilesystemProvider();
         $this->registerDatabaseProvider();
         $this->registerCompressorProvider();
@@ -70,7 +72,6 @@ class Laravel4ServiceProvider extends ServiceProvider {
             $provider = new Databases\DatabaseProvider($this->getDatabaseConfig($app['config']['database.connections']));
             $provider->add(new Databases\MysqlDatabase);
             $provider->add(new Databases\PostgresqlDatabase);
-            $provider->add(new Databases\MongodbDatabase);
             return $provider;
         });
     }
@@ -107,9 +108,9 @@ class Laravel4ServiceProvider extends ServiceProvider {
      */
     private function registerArtisanCommands() {
         $this->commands([
-            \BackupManager\Laravel\Laravel4DbBackupCommand::class,
-            \BackupManager\Laravel\Laravel4DbRestoreCommand::class,
-            \BackupManager\Laravel\Laravel4DbListCommand::class
+            \BackupManager\Laravel\Laravel55DbBackupCommand::class,
+            \BackupManager\Laravel\Laravel55DbRestoreCommand::class,
+            \BackupManager\Laravel\Laravel55DbListCommand::class,
         ]);
     }
 
@@ -124,37 +125,5 @@ class Laravel4ServiceProvider extends ServiceProvider {
             \BackupManager\Databases\DatabaseProvider::class,
             \BackupManager\ShellProcessing\ShellProcessor::class,
         ];
-    }
-
-    /**
-     * @param $connections
-     * @return Config
-     */
-    private function getDatabaseConfig($connections) {
-        $mapped = array_map(function ($connection) {
-            if ( ! in_array($connection['driver'], ['mysql', 'pgsql', 'mongodb'])) {
-                return;
-            }
-
-            if (isset($connection['port'])) {
-                $port = $connection['port'];
-            } else {
-                if ($connection['driver'] == 'mysql') {
-                    $port = '3306';
-                } elseif ($connection['driver'] == 'pgsql') {
-                    $port = '5432';
-                }
-            }
-
-            return [
-                'type'     => $connection['driver'],
-                'host'     => $connection['host'],
-                'port'     => $port,
-                'user'     => $connection['username'],
-                'pass'     => $connection['password'],
-                'database' => $connection['database'],
-            ];
-        }, $connections);
-        return new Config($mapped);
     }
 }

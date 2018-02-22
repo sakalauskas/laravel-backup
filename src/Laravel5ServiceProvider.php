@@ -13,6 +13,7 @@ use BackupManager\ShellProcessing\ShellProcessor;
  * @package BackupManager\Laravel
  */
 class Laravel5ServiceProvider extends ServiceProvider {
+    use GetDatabaseConfig;
 
     protected $defer = true;
 
@@ -50,7 +51,9 @@ class Laravel5ServiceProvider extends ServiceProvider {
         $this->app->bind(\BackupManager\Filesystems\FilesystemProvider::class, function ($app) {
             $provider = new Filesystems\FilesystemProvider(new Config($app['config']['backup-manager']));
             $provider->add(new Filesystems\Awss3Filesystem);
+            $provider->add(new Filesystems\GcsFilesystem);
             $provider->add(new Filesystems\DropboxFilesystem);
+            $provider->add(new Filesystems\DropboxV2Filesystem);
             $provider->add(new Filesystems\FtpFilesystem);
             $provider->add(new Filesystems\LocalFilesystem);
             $provider->add(new Filesystems\RackspaceFilesystem);
@@ -123,33 +126,5 @@ class Laravel5ServiceProvider extends ServiceProvider {
             \BackupManager\Databases\DatabaseProvider::class,
             \BackupManager\ShellProcessing\ShellProcessor::class,
         ];
-    }
-
-    private function getDatabaseConfig($connections) {
-        $mapped = array_map(function ($connection) {
-            if ( ! in_array($connection['driver'], ['mysql', 'pgsql', 'mongodb'])) {
-                return;
-            }
-
-            if (isset($connection['port'])) {
-                $port = $connection['port'];
-            } else {
-                if ($connection['driver'] == 'mysql') {
-                    $port = '3306';
-                } elseif ($connection['driver'] == 'pgsql') {
-                    $port = '5432';
-                }
-            }
-
-            return [
-                'type'     => $connection['driver'],
-                'host'     => $connection['host'],
-                'port'     => $port,
-                'user'     => $connection['username'],
-                'pass'     => $connection['password'],
-                'database' => $connection['database'],
-            ];
-        }, $connections);
-        return new Config($mapped);
     }
 }

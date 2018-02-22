@@ -13,6 +13,13 @@ return [
         'bucket' => '',
         'root'   => '',
     ],
+    'gcs' => [
+        'type' => 'Gcs',
+        'key'    => '',
+        'secret' => '',
+        'bucket' => '',
+        'root'   => '',
+    ],
     'rackspace' => [
         'type' => 'Rackspace',
         'username' => '',
@@ -23,7 +30,7 @@ return [
         'root' => '',
     ],
     'dropbox' => [
-        'type' => 'Dropbox',
+        'type' => 'DropboxV2',
         'token' => '',
         'key' => '',
         'secret' => '',
