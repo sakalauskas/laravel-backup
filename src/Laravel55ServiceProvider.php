@@ -71,6 +71,7 @@ class Laravel55ServiceProvider extends ServiceProvider {
             $provider = new Databases\DatabaseProvider($this->getDatabaseConfig($app['config']['database.connections']));
             $provider->add(new Databases\MysqlDatabase);
             $provider->add(new Databases\PostgresqlDatabase);
+            $provider->add(new Databases\MongodbDatabase);  
             return $provider;
         });
     }
