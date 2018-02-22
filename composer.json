@@ -21,7 +21,7 @@
     }
   ],
   "require": {
-    "backup-manager/backup-manager": "dev-master",
+    "backup-manager/backup-manager": "dev-mongodb",
     "php": "^5.5.0|^7.0",
     "symfony/process": "^3.0||^4.0",
     "illuminate/support": "^4.0||^5.0",
