@@ -67,6 +67,7 @@ class Laravel4ServiceProvider extends ServiceProvider {
             $provider = new Databases\DatabaseProvider($this->getDatabaseConfig($app['config']['database.connections']));
             $provider->add(new Databases\MysqlDatabase);
             $provider->add(new Databases\PostgresqlDatabase);
+            $provider->add(new Databases\MongodbDatabase);
             return $provider;
         });
     }
@@ -128,7 +129,7 @@ class Laravel4ServiceProvider extends ServiceProvider {
      */
     private function getDatabaseConfig($connections) {
         $mapped = array_map(function ($connection) {
-            if ( ! in_array($connection['driver'], ['mysql', 'pgsql'])) {
+            if ( ! in_array($connection['driver'], ['mysql', 'pgsql', 'mongodb'])) {
                 return;
             }
 

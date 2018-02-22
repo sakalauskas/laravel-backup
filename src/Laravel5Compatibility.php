@@ -11,7 +11,8 @@ trait Laravel5Compatibility {
      * @internal param string $style
      * @return void
      */
-    public function table(array $headers, $rows, $style = 'default') {
+    public function table($headers, $rows, $tableStyle = 'default', array $columnStyles = [])
+    {
         $table = $this->getHelperSet()->get('table');
         $table->setHeaders($headers);
         $table->setRows($rows);
